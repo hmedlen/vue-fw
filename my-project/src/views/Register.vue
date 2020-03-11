@@ -8,19 +8,15 @@
       </div>
 
       <div class="pl-4 pr-4 pt-2 pb-2">
-        <input
+        <v-text-field
           v-model="email"
-          type="email"
-          name="email"
-          placeholder="email" />
+          label="Email" />
 
         <br>
 
-        <input
+        <v-text-field
           v-model="password"
-          type="password"
-          name="password"
-          placeholder="password" />
+          label="Password" />
 
         <br>
         <div class="error" v-html="error" />
@@ -70,6 +66,8 @@ export default {
       } catch (error) {
         this.error = error.response.data.error
       }
+
+      // Another way to do this? Save for now.
       // const response = await AuthenticationService.register({
       //   email: this.email,
       //   password: this.password
