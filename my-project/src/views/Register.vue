@@ -1,68 +1,59 @@
 <template>
-  <v-layout column>
-    <v-flex xs6 offset-xs3>
-      <div class="white elevation-2">
-        <v-toolbar flat dense class="cyan" dark>
-          <v-toolbar-title>Register</v-toolbar-title>
-        </v-toolbar>
-      </div>
+  <v-container class="grey lighten-5">
+    <v-row class="mb-6" no-gutters>
+      <v-col cols="1" />
 
-      <div class="pl-4 pr-4 pt-2 pb-2">
-        <v-text-field
-          v-model="email"
-          label="Email" />
+      <v-col cols="10">
+        <panel title="Register">
+          <form
+            name="tab-tracker-form"
+            autocomplete="off">
+            <v-text-field
+              v-model="email"
+              label="Email" />
+            <v-text-field
+              v-model="password"
+              label="Password"
+              autocomplete="new-password" />
+          </form>
 
-        <br>
+          <br>
+          <div class="error" v-html="error" />
+          <br>
 
-        <v-text-field
-          v-model="password"
-          label="Password" />
+          <v-btn
+            class="primary"
+            @click="register">
+            Register
+          </v-btn>
+        </panel>
+      </v-col>
 
-        <br>
-        <div class="error" v-html="error" />
-        <br>
-
-        <!-- <button
-          @click="register">
-          Register
-        </button> -->
-        <v-btn
-          class="cyan"
-          @click="register">
-          Register
-        </v-btn>
-      </div>
-    </v-flex>
-  </v-layout>
-
-  <!-- <div>
-    <h1>Register</h1>
-
-
-
-
-  </div> -->
+      <v-col cols="1" />
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-// @ is an alias to /src
-// import Register from '@/components/Register.vue'
 import AuthenticationService from '@/services/AuthenticationService'
+import Panel from '@/components/Panel'
 
 export default {
   name: 'Register',
 
-  // components: {
-  //   Register
-  // },
+  components: {
+    Panel
+  },
 
   methods: {
-    async register() {
+    async register () {
       try {
-        await AuthenticationService.register({
+        const response = await AuthenticationService.login({
           email: this.email,
           password: this.password
         })
+        this.$store.dispatch('setToken', response.data.token)
+        this.$store.dispatch('setUser', response.data.user) 
       } catch (error) {
         this.error = error.response.data.error
       }
